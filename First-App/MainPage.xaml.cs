@@ -2,24 +2,42 @@
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
 
 	public MainPage()
 	{
 		InitializeComponent();
-		
 	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
+	private async void OnSimpleAlertClicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("Aviso", "Este é um alerta simples!", "OK");
+    }
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+    private async void OnConfirmationAlertClicked(object sender, EventArgs e)
+    {
+        bool resposta = await DisplayAlert("Confirmação", "Você deseja continuar?", "Sim", "Não");
+        if (resposta)
+        {
+            await DisplayAlert("Escolha", "Você escolheu SIM!", "OK");
+        }
+        else
+        {
+            await DisplayAlert("Escolha", "Você escolheu NÃO!", "OK");
+        }
+    }
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
+    private async void OnPromptClicked(object sender, EventArgs e)
+    {
+        string nome = await DisplayPromptAsync("Seu Nome", "Digite seu nome:");
+        if (!string.IsNullOrEmpty(nome))
+        {
+            await DisplayAlert("Olá!", $"Bem-vindo, {nome}!", "OK");
+        }
+    }
+
+    private async void OnNavigateClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new SecondPage());
+    }
 }
 
