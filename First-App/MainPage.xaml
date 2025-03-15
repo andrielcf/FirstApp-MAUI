@@ -3,11 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="First_App.MainPage">
 
-    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
-        <Button Text="Alerta Simples" Clicked="OnSimpleAlertClicked" BackgroundColor="DodgerBlue" TextColor="White" CornerRadius="10" Padding="10"/>
-        <Button Text="Alerta de Confirmação" Clicked="OnConfirmationAlertClicked" BackgroundColor="MediumSeaGreen" TextColor="White" CornerRadius="10" Padding="10"/>
-        <Button Text="Alerta com Entrada de Texto" Clicked="OnPromptClicked" BackgroundColor="Orange" TextColor="White" CornerRadius="10" Padding="10"/>
-        <Button Text="Ir para Segunda Página" Clicked="OnNavigateClicked" BackgroundColor="Crimson" TextColor="White" CornerRadius="10" Padding="10"/>
-    </StackLayout>
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label Text="GERADOR DE PESSOA"/>
+
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <Button Text="Gerar pessoa" Clicked="consultPerson" />
+
+            <Label x:Name="NameLabel" FontSize="18" FontAttributes="Bold" />
+            <Label x:Name="EmailLabel" FontSize="16" />
+            <Label x:Name="PhoneLabel" FontSize="16" />
+            <Label x:Name="LocationLabel" FontSize="16" />
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
 
 </ContentPage>
