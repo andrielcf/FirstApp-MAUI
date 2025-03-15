@@ -1,43 +1,54 @@
-﻿namespace First_App;
+﻿using Newtonsoft.Json;
+
+namespace First_App;
 
 public partial class MainPage : ContentPage
 {
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
-
-	private async void OnSimpleAlertClicked(object sender, EventArgs e)
+    public MainPage()
     {
-        await DisplayAlert("Aviso", "Este é um alerta simples!", "OK");
+        InitializeComponent();
     }
 
-    private async void OnConfirmationAlertClicked(object sender, EventArgs e)
+    private async void consultPerson(object sender, EventArgs e)
     {
-        bool resposta = await DisplayAlert("Confirmação", "Você deseja continuar?", "Sim", "Não");
-        if (resposta)
+        string url = "https://randomuser.me/api/";
+        try
         {
-            await DisplayAlert("Escolha", "Você escolheu SIM!", "OK");
-        }
-        else
-        {
-            await DisplayAlert("Escolha", "Você escolheu NÃO!", "OK");
-        }
-    }
+            var result = await FetchDataFromApi(url);
 
-    private async void OnPromptClicked(object sender, EventArgs e)
-    {
-        string nome = await DisplayPromptAsync("Seu Nome", "Digite seu nome:");
-        if (!string.IsNullOrEmpty(nome))
+            if (result != null)
+            {
+                NameLabel.Text = $"Name: {result.name.first} {result.name.last}";
+                EmailLabel.Text = $"Email: {result.email}";
+                PhoneLabel.Text = $"Phone: {result.phone}";
+                LocationLabel.Text = $"Location: {result.location.city}, {result.location.country}";
+            }
+            else
+            {
+                await DisplayAlert("Error", "No data found.", "OK");
+            }
+        }
+        catch (Exception ex)
         {
-            await DisplayAlert("Olá!", $"Bem-vindo, {nome}!", "OK");
+            await DisplayAlert("Error", ex.Message, "OK");
         }
     }
 
-    private async void OnNavigateClicked(object sender, EventArgs e)
+    private async Task<randomPersonDTO.Result> FetchDataFromApi(string url)
     {
-        await Navigation.PushAsync(new SecondPage());
+        using (HttpClient client = new HttpClient())
+        {
+            var response = await client.GetStringAsync(url);
+            var data = JsonConvert.DeserializeObject<randomPersonDTO.Root>(response);
+
+            if (data.results != null && data.results.Count > 0)
+            {
+                return data.results[0];
+            }
+            else{
+                return null;
+            }
+        }
     }
 }
-
